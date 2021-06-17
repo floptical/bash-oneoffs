@@ -12,6 +12,7 @@ trap 'echo "\"${last_command}\" command filed with exit code $?."' EXIT
 
 # UUID of the archive drive:
 archive_uuid='060a826e-d440-4517-b349-9b33126e0ba3'
+# UUID of the main plex drive:
 main_uuid='a5bda2f6-926f-4a36-8f76-55635c3dcb4f'
 
 # Check status, should take a bit to kick it out of deep sleep mode.
@@ -35,7 +36,6 @@ else
     echo "Rsync returned non-zeo exit status: $?"
 fi
 
-#Set to low power standby mode. -Y would completely spin it down and it takes much longer to start back up
 umount /archive
 
 # Get the total spin-up time. Need to check this before putting in standby mode.
@@ -44,8 +44,8 @@ smartctl -a /dev/disk/by-uuid/$archive_uuid | grep Spin_Up_Time
 # Place drive into standby mode, should cause it to spin down.
 # -Y is lowest power mode.
 # -y is standby while still powered?
-
 hdparm -Y /dev/disk/by-uuid/$archive_uuid
+
 # Check status
 hdparm -C /dev/disk/by-uuid/$archive_uuid
-
+#fin
