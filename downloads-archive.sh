@@ -1,8 +1,8 @@
 #!/bin/bash
 PATH=/sbin:/bin:/usr/sbin:/usr/bin
 # debug output
-set -x
-
+#set -x
+date
 # keep track of the last executed command
 trap 'last_command=$current_command; current_command=$BASH_COMMAND' DEBUG
 # echo an error message before exiting
@@ -61,6 +61,4 @@ hdparm -y /dev/disk/by-uuid/$archive_uuid
 sleep 5
 hdparm -Y /dev/disk/by-uuid/$archive_uuid
 
-# Check status
-#hdparm -C /dev/disk/by-uuid/$archive_uuid
 #fin
