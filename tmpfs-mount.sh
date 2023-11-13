@@ -12,6 +12,7 @@ current_user=$(whoami)
 # Keeps setup specific to higher-level user and allows us to mount the device at the end.
 if sudo -l -U "$current_user" 2>&1 | grep -q "is not allowed to run sudo on"; then
     echo "User $current_user does not have sudo privileges, please run as a user that does."
+    exit 1
 fi
 
 MOUNT_DIR="/tmpfs-secure"
@@ -23,16 +24,18 @@ if [ ! -d "$MOUNT_DIR" ]; then
     mkdir -p "$MOUNT_DIR"
     if [ $? -ne 0 ]; then
         echo "Failed to create directory $MOUNT_DIR"
-        return 1
+        exit 1
     fi
 fi
 
 # Failsafe in case we don't get proper user with whoami for some reason
 if [ $(id -u $current_user) -eq 0 ]; then
     echo "Cannot mount with a UID of 0, something's gone wrong?"
+    exit 1
 fi
 if [ $(id -g $current_user) -eq 0 ]; then
     echo "Cannot mount with a GID of 0, something's gone wrong?"
+    exit 1
 fi
 
 # Mount tmpfs on the specified directory
